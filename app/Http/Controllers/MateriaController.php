@@ -37,12 +37,20 @@ class MateriaController extends Controller
      */
     public function show(Materia $materia)
     {
-        //
+        $materias = Materia::all();
+
+        return response()->json(['materias' => $materias]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
+     public function pendientes(string $estado)
+    {
+        $materias = Materia::where('estado',$estado);
+
+        return response()->json(['materias' => $materias]);
+    }
     public function edit(Materia $materia)
     {
         //
