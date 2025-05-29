@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Materia;
 use App\Http\Requests\StoreMateriaRequest;
 use App\Http\Requests\UpdateMateriaRequest;
+use Illuminate\Http\Request;
 
 class MateriaController extends Controller
 {
@@ -45,10 +46,14 @@ class MateriaController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-     public function pendientes(string $estado)
+    public function pendientes(Request $request)
     {
-        $materias = Materia::where('estado',$estado);
+        $validate = $request->validate([ //REALIZA LA VALIDACIÓN DE LOS CAMPOS
+            'estado' => 'required|max:255',
 
+        ]);
+        $materias = Materia::where('estado', $request->estado)->get();
+    
         return response()->json(['materias' => $materias]);
     }
     public function edit(Materia $materia)

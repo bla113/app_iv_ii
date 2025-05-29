@@ -17,7 +17,7 @@ Route::controller(UserController::class)->group(function () {
 Route::controller(MateriaController::class)->group(function () {
  
     Route::post('materias', 'show')->name('materias')->middleware('auth:sanctum');
-    Route::post('pendientes', 'pendientes')->name('materias.pendientes')->middleware('auth:sanctum');
+    Route::post('pendientes', 'pendientes')->name('pendientes')->middleware('auth:sanctum');
 
 });
 
