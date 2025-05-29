@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('codigo')->nullable();
             $table->string('nombre')->nullable();
-            $table->int('creditos')->nullable();
+            $table->integer('creditos')->nullable();
             $table->string('requisito')->nullable();
             $table->string('estado')->default('pendiente');
             $table->timestamps();
