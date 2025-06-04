@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 class UserController extends Controller
 {
-     static function users()
+    static function users()
     {
 
         $user = User::all();
@@ -17,7 +17,7 @@ class UserController extends Controller
         return response()->json(['user' => $user]);
 
     }
-      public static function register(Request $request)
+    public static function register(Request $request)
     { // REQUEST ES LO QUE SE ENVIA ATRAVEZ DEL ENDPOINT 
 
         $validate = $request->validate([ //REALIZA LA VALIDACIÓN DE LOS CAMPOS
@@ -32,35 +32,48 @@ class UserController extends Controller
 
         $user = User::create(//CREACION DEL USUARIO
             [
-                'name' =>  $request->name,
-                'email' =>  $request->email,
+                'name' => $request->name,
+                'email' => $request->email,
                 'password' => $request->password,
             ]
         );
         $token = $user->createToken('auth_token')->plainTextToken;// CREA EL TOKEN DE SEGURIDAD DE USO
 
-        return response()->json(['message'=>'Usuario creado correctamente','usuario'=>$user,'token_app'=>$token],200);
+        return response()->json(['message' => 'Usuario creado correctamente', 'usuario' => $user, 'token_app' => $token], 200);
     }
 
-    
-   public static function login(Request $request){//DECLARAR QUE SE TRABAJA CON REQUEST
 
-    if (!Auth::attempt($request->only('email', 'password'))) {
+    public static function login(Request $request)
+    {//DECLARAR QUE SE TRABAJA CON REQUEST
 
-        return response()->json(['message' => 'Unautorized', 'code' => 401]);
+        if (!Auth::attempt($request->only('email', 'password'))) {
+
+            return response()->json(['message' => 'Unautorized', 'code' => 401]);
+        }
+        $user = User::where('email', $request->email)->firstOrFail(); //TRAE EL USUARIO DE  LA BD
+
+        $token = $user->createToken('auth_token')->plainTextToken;// CREA TOKEN CADA VEZ QUE SE LOGUEA
+
+        return response()->json(['message' => 'Hi' . $user->name, 'accessToken' => $token, 'user' => $user]);
+
     }
-    $user = User::where('email', $request->email)->firstOrFail(); //TRAE EL USUARIO DE  LA BD
-
-    $token = $user->createToken('auth_token')->plainTextToken;// CREA TOKEN CADA VEZ QUE SE LOGUEA
-    
-    return response()->json(['message' => 'Hi' . $user->name, 'accessToken' => $token, 'user' => $user]);
-    
-   } 
-     public function logout(Request $request)
+    public function logout(Request $request)
     {
         //hapus semua tuken by user
         $request->user()->tokens()->delete();
         //response no content
-        return response()->noContent();
-    }   
+        return response()->json(['message'=>'Sesión cerrada correctamente']);
+    }
+    public function update(Request $request)
+    {
+         $user = Auth::user();
+
+         $user->name = isset( $request->name)?$request->name: $user->name;
+         $user->email = isset( $request->email)?$request->email: $user->email;
+         $user->password = isset( $request->password)?$request->password: $user->password;
+
+         $user->save();
+        return response()->json( ['message'=>'Usuario actualizado', 'user'=>$user]);
+    }
+    
 }

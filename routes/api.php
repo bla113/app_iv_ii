@@ -11,6 +11,7 @@ Route::get('/user', function (Request $request) {
 Route::controller(UserController::class)->group(function () {
     Route::post('register', 'register');
     Route::post('login', 'login');
+    Route::post('edit', 'update')->middleware('auth:sanctum');
     Route::post('logout', 'logout')->name('logout.user.app')->middleware('auth:sanctum');
 
 });
@@ -18,6 +19,7 @@ Route::controller(MateriaController::class)->group(function () {
  
     Route::post('materias', 'show')->name('materias')->middleware('auth:sanctum');
     Route::post('pendientes', 'pendientes')->name('pendientes')->middleware('auth:sanctum');
+    Route::get('materia/detalle/{id}', 'edit')->name('detail')->middleware('auth:sanctum');
 
 });
 

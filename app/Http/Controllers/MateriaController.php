@@ -53,12 +53,21 @@ class MateriaController extends Controller
 
         ]);
         $materias = Materia::where('estado', $request->estado)->get();
-    
+
         return response()->json(['materias' => $materias]);
     }
-    public function edit(Materia $materia)
+    public function detail(int $id)
     {
-        //
+     
+        $materia = Materia::find( $id)->get();
+
+        return response()->json(['materia' => $materia]);
+    }
+    public function edit( $materia)
+    {
+        $materia = Materia::find( $materia);
+
+        return response()->json(['materia' => $materia]);
     }
 
     /**
