@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
     static function users()
@@ -70,7 +71,7 @@ class UserController extends Controller
 
          $user->name = isset( $request->name)?$request->name: $user->name;
          $user->email = isset( $request->email)?$request->email: $user->email;
-         $user->password = isset( $request->password)?$request->password: $user->password;
+         $user->password = isset( $request->password)? Hash::make($request->newPassword) : $user->password;
 
          $user->save();
         return response()->json( ['message'=>'Usuario actualizado', 'user'=>$user]);
