@@ -71,7 +71,7 @@ class UserController extends Controller
 
          $user->name = isset( $request->name)?$request->name: $user->name;
          $user->email = isset( $request->email)?$request->email: $user->email;
-         $user->password = isset( $request->password)? Hash::make($request->newPassword) : $user->password;
+         $user->password = isset( $request->password)? Hash::make($request->password) : $user->password;
 
          $user->save();
         return response()->json( ['message'=>'Usuario actualizado', 'user'=>$user]);
